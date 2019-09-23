@@ -27,6 +27,7 @@ export default {
     display: flex;
     height: 44px;
     line-height: 44px;
+    background-color: var(--color-tint);
   }
   .left,.right{
     width: 60px;
