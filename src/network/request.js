@@ -4,7 +4,7 @@ export function request(config){    //导出一个方法
   //1.创建一个axios实例
   const instance = axios.create({   
     baseURL:"http://123.207.32.32:8000/api/v1",  //url前面一定要加http://，不然获取不到数据
-    timeout:5000
+    timeout:10000
   })
   
   //2.axios的拦截器

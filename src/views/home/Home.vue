@@ -7,38 +7,7 @@
       <Recommend :recommend="recommend"></Recommend>
       <FeaTure></FeaTure>
       <TabControl class="Tab-Control" :title="['流行','新款','精选']"></TabControl>
-    <ul>
-      <li>1</li>
-      <li>2</li>
-      <li>3</li>
-      <li>4</li>
-      <li>5</li>
-      <li>6</li>
-      <li>7</li>
-      <li>8</li>
-      <li>9</li>
-      <li>0</li>
-      <li>1</li>
-      <li>2</li>
-      <li>3</li>
-      <li>5</li>
-      <li>6</li>
-      <li>1</li>
-      <li>2</li>
-      <li>3</li>
-      <li>4</li>
-      <li>5</li>
-      <li>6</li>
-      <li>7</li>
-      <li>8</li>
-      <li>9</li>
-      <li>0</li>
-      <li>1</li>
-      <li>2</li>
-      <li>3</li>
-      <li>5</li>
-      <li>6</li>
-    </ul>
+      <GoodList :goodslist="goods['pop'].list"></GoodList>
   </div>
 </template>
 
@@ -49,6 +18,7 @@ import FeaTure from "./childcomponent/featureviews"
 
 import NavBar from "components/common/navbar/NavBar";
 import TabControl from "components/content/tabcontrol/TabControl"
+import GoodList from "components/content/goods/GoodsList"
 
 
 import { getHomeMultidata,getGoods} from "network/home"; //导入单独的网络请求封装
@@ -59,7 +29,8 @@ export default {
     HomeSwiper,
     Recommend,
     FeaTure,
-    TabControl
+    TabControl,
+    GoodList
   },
   props: {},
   data() {
@@ -124,7 +95,8 @@ export default {
 }
 .Tab-Control{
   position: sticky;
-  top:44px
+  top:44px;
+  z-index: 9;
   /* position:sticky属性，当滚动条未到设置的top属性时，position处于一个static状态，当滚动条到达设置的高度时，
       position会变成fixed状态，根据设置的top属性相对于浏览器进行定位，来达到一个息顶的效果 */
 }
