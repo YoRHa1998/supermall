@@ -32,7 +32,8 @@ export default {
   computed: {},
   methods: {
     activeclick(index){
-      this.curronterIndex = index  //当点击div时将该div的index赋给curronterIndex，从而激活active样式
+      this.curronterIndex = index,  //当点击div时将该div的index赋给curronterIndex，从而激活active样式
+      this.$emit('tabclick',index)  //当点击的时候通过$emit将index值传递给父组件
     }
   },
   created() {},

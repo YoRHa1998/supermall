@@ -6,8 +6,8 @@
       <HomeSwiper :banner="banner"></HomeSwiper>
       <Recommend :recommend="recommend"></Recommend>
       <FeaTure></FeaTure>
-      <TabControl class="Tab-Control" :title="['流行','新款','精选']"></TabControl>
-      <GoodList :goodslist="goods['pop'].list"></GoodList>
+      <TabControl class="Tab-Control" :title="['流行','新款','精选']" @tabclick="tabclick"></TabControl>
+      <GoodList :goodslist="showGoods"></GoodList>
   </div>
 </template>
 
@@ -42,12 +42,32 @@ export default {
         'pop':{page:0,list:[]},
         'new':{page:0,list:[]},
         'sell':{page:0,list:[]},
-      }
+      },
+      currentType:'pop'
     };
   },
   watch: {},
-  computed: {},
+  computed: {
+    showGoods(){  //通过计算属性来判断goods的显示
+      return this.goods[this.currentType].list
+    }
+  },
   methods: {
+    tabclick(index){  //在tabcontrol中通过$emit暴露出来的方法
+      switch(index){
+        case 0: 
+          this.currentType = 'pop' 
+          break
+        case 1:  
+          this.currentType = 'new' 
+          break
+        case 2:  
+          this.currentType = 'sell' 
+      }
+    },
+
+
+
     //将网络请求封装成方法，之后再created中调用方法，保持良好的代码结构
     gethomemultidata(){
     getHomeMultidata().then(res => {
