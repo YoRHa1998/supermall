@@ -7,6 +7,7 @@ const Home = () => import('views/home/Home')
 const Category = () => import('views/category/Category')
 const Cars = () => import('views/cars/Cars')
 const Profile = () => import('views/profile/Profile')
+const Detail = () => import('views/detail/Detail')
 
 export default new Router({
   mode: 'history',
@@ -32,5 +33,9 @@ export default new Router({
       path:'/profile',
       component:Profile
     },
+    {
+      path:'/detail/:iid',  //动态路由的使用，路径后面跟上冒号+变量名
+      component:Detail
+    }
   ],
 })

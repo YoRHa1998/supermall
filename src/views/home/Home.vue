@@ -66,7 +66,8 @@ export default {
       currentType: "pop",
       isShowBack:false,
       tabOffsetTop:0,
-      istabshow:false
+      istabshow:false,
+      scrolly:0
     };
   },
   watch: {},
@@ -144,10 +145,18 @@ export default {
     this.getgoods("pop");
     this.getgoods("new");
     this.getgoods("sell");
+  
+  },
 
-
+  activated() {
+    this.$refs.scroll.refresh();   //每次回来的时候刷新一下，能防止一些小bug
+    this.$refs.scroll.scrollTo(0,this.scrolly,0)  //回到页面时通过scrollTo方法让页面回到之前记录的位置
 
   },
+  deactivated() {
+    this.scrolly = this.$refs.scroll.scroll.y   //离开页面时记录当前滚动到哪里的值
+  },
+
   mounted() {
 
     //接收事件总线发送的事件

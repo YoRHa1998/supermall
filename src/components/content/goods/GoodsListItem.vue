@@ -1,5 +1,5 @@
 <template>
-  <div class="goods-item">
+  <div class="goods-item" @click="itemclick">
     <img :src="goodsitem.show.img" alt="" @load="imageload">
   <div class="goods-info">
     <p>{{ goodsitem.title }}</p>
@@ -22,6 +22,7 @@ export default {
   },
   data(){
     return {
+      iid:null   //保存每个商品的id
     }
   },
   watch:{},
@@ -29,9 +30,15 @@ export default {
   methods:{
     imageload(){
       this.$bus.$emit('imageload')
+    },
+    itemclick(){
+      //监听商品的点击事件，当发生点击的时候进行路由的跳转
+      this.$router.push('/detail/' + this.iid)  //通过动态路由传递id,注意路径前后都有斜杠
     }
   },
-  created(){},
+  created(){
+    this.iid = this.goodsitem.iid  //从数据中读取id并保存
+  },
   mounted(){}
 }
 </script>
