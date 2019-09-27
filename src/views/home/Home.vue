@@ -1,18 +1,29 @@
 <template>
   <div id="home">
-    <div class="home-bar">
-      <NavBar>
-        <div slot="center">购物街</div>
-      </NavBar>
-    </div>
 
-    <Scroll class="content">
-      <HomeSwiper :banner="banner"></HomeSwiper>
+    <NavBar class="home-bar"><div slot="center">购物街</div></NavBar>
+
+    <TabControl :title="['流行','新款','精选']"
+                @tabclick="tabclick"
+                ref="tabControl1"
+                :class="{tabcontrol:istabshow}"></TabControl>
+
+    <Scroll class="content"
+            ref="scroll"
+            :probetype="3"
+            :pullUpLoad='true'
+            @backscroll="backscroll"
+            @pullUpLoad="loadmore">
+      <HomeSwiper :banner="banner" @imgload="imgload"></HomeSwiper>
       <Recommend :recommend="recommend"></Recommend>
       <FeaTure></FeaTure>
-      <TabControl class="Tab-Control" :title="['流行','新款','精选']" @tabclick="tabclick"></TabControl>
+      <TabControl :title="['流行','新款','精选']" @tabclick="tabclick" ref="tabControl"></TabControl>
       <GoodList :goodslist="showGoods"></GoodList>
     </Scroll>
+
+    <BackTop @click.native="backClick" v-show="isShowBack"></BackTop>
+    <!-- .native 监听组件的原生方法需要加上这个修饰符，否则是监听不到的 -->
+
   </div>
 </template>
 
@@ -25,6 +36,7 @@ import NavBar from "components/common/navbar/NavBar";
 import TabControl from "components/content/tabcontrol/TabControl";
 import GoodList from "components/content/goods/GoodsList";
 import Scroll from "components/common/scroll/Scroll";
+import BackTop from "components/content/backtop/BackTop"
 
 import { getHomeMultidata, getGoods } from "network/home"; //导入单独的网络请求封装
 
@@ -36,7 +48,8 @@ export default {
     FeaTure,
     TabControl,
     GoodList,
-    Scroll
+    Scroll,
+    BackTop
   },
   props: {},
   data() {
@@ -50,7 +63,10 @@ export default {
         new: { page: 0, list: [] },
         sell: { page: 0, list: [] }
       },
-      currentType: "pop"
+      currentType: "pop",
+      isShowBack:false,
+      tabOffsetTop:0,
+      istabshow:false
     };
   },
   watch: {},
@@ -62,7 +78,7 @@ export default {
   },
   methods: {
     tabclick(index) {
-      //在tabcontrol中通过$emit暴露出来的方法
+      //1.在tabcontrol中通过$emit暴露出来的方法
       switch (index) {
         case 0:
           this.currentType = "pop";
@@ -73,6 +89,26 @@ export default {
         case 2:
           this.currentType = "sell";
       }
+
+      //2.每次点击修改两个tabcontrol的curronterIndex的值，使得两个tabcontrol的显示一致
+      this.$refs.tabControl1.curronterIndex = index
+      this.$refs.tabControl.curronterIndex = index
+    },
+    backClick(){
+      this.$refs.scroll.scrollTo(0,0,500)   //通过$refs拿到scroll的组件对象，然后调用对象里的方法
+    },
+    backscroll(position){  
+      //1.拿到scroll发送的滚动数值，当y轴滚动大于1000时，显示backtop组件
+      this.isShowBack = (-position.y)>1000
+
+      //2.通过监听滚动数值是否大于获取到的offsetTop值来决定是否显示tabcontrol
+      this.istabshow = (-position.y) > this.tabOffsetTop  
+    },
+    loadmore(){  //触发上拉加载更多时执行请求数据的方法
+      this.getgoods(this.currentType)  //传入页面当前选择的类型
+    },
+    imgload(){    //接收当轮播图加载好之后传过来的方法
+      this.tabOffsetTop = this.$refs.tabControl.$el.offsetTop  //获取到tabcontrol距离顶部的距离
     },
 
     //将网络请求封装成方法，之后再created中调用方法，保持良好的代码结构
@@ -85,6 +121,8 @@ export default {
       });
     },
 
+
+
     //请求首页数据的方法
     getgoods(type) {
       //传入Type
@@ -93,7 +131,8 @@ export default {
         //传入type和page来获取对应的数据
         this.goods[type].list.push(...res.data.list); //push(...数组)是一种特殊语法，能够解析数组中的数据，然后
         //push到目标数组中
-        this.goods[type].page += 1; //之后保存页数
+        this.goods[type].page += 1; //之后保存页数      
+        this.$refs.scroll.finishPullUp()  //表示当前上拉加载请求数据展示已经完成，可以进行下一次
       });
     }
   },
@@ -105,30 +144,41 @@ export default {
     this.getgoods("pop");
     this.getgoods("new");
     this.getgoods("sell");
+
+
+
   },
-  mounted() {}
+  mounted() {
+
+    //接收事件总线发送的事件
+    this.$bus.$on('imageload',()=>{
+      this.$refs.scroll.refresh()
+    })
+  }
 };
 </script>
 <style scoped>
+
+.home{
+  /* padding-top: 44px; */
+  height: 100vh;
+  position: relative;
+}
 .home-bar {
   text-align: center;
   color: #ffffff;
   position: fixed;
   left: 0;
   right: 0;
-  top: 0;
+  top: 0; 
   z-index: 9;
 }
-#home {
-  padding-top: 44px;
-}
-.Tab-Control {
-  position: sticky;
+/* .Tab-Control {   
+  position: sticky;    //被better-scroll包裹之后
   top: 44px;
   z-index: 9;
   /* position:sticky属性，当滚动条未到设置的top属性时，position处于一个static状态，当滚动条到达设置的高度时，
       position会变成fixed状态，根据设置的top属性相对于浏览器进行定位，来达到一个息顶的效果 */
-}
 
 .content{
   position: absolute;
@@ -136,5 +186,11 @@ export default {
   bottom: 49px;
   left: 0;
   right: 0;
+}
+.tabcontrol{
+  margin-top: 44px;
+  position: relative;
+  z-index: 9;
+  /* z-index只能设置在有定位属性的元素上 */
 }
 </style>
