@@ -1,17 +1,27 @@
 <template>
   <div>
-    <h3>详情页</h3>
-    <h4>{{ iid }}</h4>
+    <DetailNav></DetailNav>
+    <DetailSwiper :topImages="topImages"></DetailSwiper>
   </div>
 </template>
 
 <script>
+import DetailNav from "./childcomponent/detailnavbar"
+import DetailSwiper from "./childcomponent/detailswiper"
+
+import {getDetail} from "network/detail"
+
 export default {
-  components:{},
+  name:"Detail",
+  components:{
+    DetailNav,
+    DetailSwiper
+  },
   props:{},
   data(){
     return {
-      iid:null
+      iid:null,
+      topImages:[]
     }
   },
   watch:{},
@@ -19,12 +29,12 @@ export default {
   methods:{},
   created(){
     this.iid = this.$route.params.iid  //$route为当前活跃的路由，params为路由后面带的参数
+
+    getDetail(this.iid).then(res => {
+      this.topImages = res.result.itemInfo.topImages
+    })
   },
   mounted(){},
-  destroyed() {
-    console.log('页面销毁');
-    
-  },
 }
 </script>
 <style scoped>

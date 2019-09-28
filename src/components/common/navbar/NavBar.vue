@@ -22,7 +22,7 @@ export default {
   mounted(){}
 }
 </script>
-<style>
+<style scoped>
   .nav-bar {
     display: flex;
     height: 44px;
