@@ -8,3 +8,14 @@ export function getDetail(iid){
     }
   })
 }
+
+export class Goods{
+  constructor(columns,itemInfo,services){
+    this.title = itemInfo.title,
+    this.discount = itemInfo.discountDesc,
+    this.newPrice = itemInfo.price,
+    this.oldPrice = itemInfo.oldPrice,
+    this.columns = columns,
+    this.services = services
+  }
+}

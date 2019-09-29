@@ -45,7 +45,8 @@ export default {
       this.scroll.finishPullUp()
     }
   },
-  created(){},
+  created(){
+  },
   mounted(){
     this.scroll = new BScroll(this.$refs.swiper,{
       click:true,  //在BScroll控制的区域中，button按钮无论设不设置click为true，都是可以点击的，但是div

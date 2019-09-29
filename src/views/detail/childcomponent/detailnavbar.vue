@@ -48,7 +48,9 @@ export default {
 <style scoped>
 .nav-bar{
   background-color: #fff;
-  box-shadow: 0 1px 1px rgba(100,100, 100, .2)
+  box-shadow: 0 1px 1px rgba(100,100, 100, .2);
+  position: relative;
+  z-index: 1;
 }
 
 .nav-class{
