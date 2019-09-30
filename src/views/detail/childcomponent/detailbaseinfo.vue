@@ -100,7 +100,7 @@ export default {
   }
 
   .info-service-item span {
-    font-size: 13px;
+    font-size: 10px;
     color: #333;
   }
 </style>
