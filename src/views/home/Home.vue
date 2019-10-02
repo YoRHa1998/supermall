@@ -36,7 +36,7 @@ import NavBar from "components/common/navbar/NavBar";
 import TabControl from "components/content/tabcontrol/TabControl";
 import GoodList from "components/content/goods/GoodsList";
 import Scroll from "components/common/scroll/Scroll";
-import BackTop from "components/content/backtop/BackTop"
+import {BackTopMixin} from "common/mixin"
 
 import { getHomeMultidata, getGoods } from "network/home"; //导入单独的网络请求封装
 
@@ -48,9 +48,9 @@ export default {
     FeaTure,
     TabControl,
     GoodList,
-    Scroll,
-    BackTop
+    Scroll
   },
+  mixins:[BackTopMixin],
   props: {},
   data() {
     return {
@@ -64,7 +64,6 @@ export default {
         sell: { page: 0, list: [] }
       },
       currentType: "pop",
-      isShowBack:false,
       tabOffsetTop:0,
       istabshow:false,
       scrolly:0
@@ -95,12 +94,9 @@ export default {
       this.$refs.tabControl1.curronterIndex = index
       this.$refs.tabControl.curronterIndex = index
     },
-    backClick(){
-      this.$refs.scroll.scrollTo(0,0,500)   //通过$refs拿到scroll的组件对象，然后调用对象里的方法
-    },
     backscroll(position){  
       //1.拿到scroll发送的滚动数值，当y轴滚动大于1000时，显示backtop组件
-      this.isShowBack = (-position.y)>1000
+      this.listenershowback(position)
 
       //2.通过监听滚动数值是否大于获取到的offsetTop值来决定是否显示tabcontrol
       this.istabshow = (-position.y) > this.tabOffsetTop  
@@ -195,6 +191,7 @@ export default {
   bottom: 49px;
   left: 0;
   right: 0;
+  overflow: hidden;
 }
 .tabcontrol{
   margin-top: 44px;

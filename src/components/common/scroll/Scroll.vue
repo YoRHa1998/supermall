@@ -52,7 +52,7 @@ export default {
       click:true,  //在BScroll控制的区域中，button按钮无论设不设置click为true，都是可以点击的，但是div
                   //或者span标签，如果不设置为true，是不可以点击的
       probeType:this.probetype,  //通过props动态决定是否要侦测滚动
-      pullUpLoad:this.pullUpLoad
+      pullUpLoad:this.pullUpLoad  //判断是否启用上拉加载更多
     })
 
     this.scroll.on('scroll',(position)=>{
@@ -66,5 +66,7 @@ export default {
 }
 </script>
 <style scoped>
-
+/* .content{
+  height: 100%;
+} */
 </style>
