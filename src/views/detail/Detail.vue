@@ -116,11 +116,17 @@ export default {
       product.price = this.goodsinfo.realPrice
       product.iid = this.iid
       product.count = 1
+      product.check = true
 
       //将数据传到vuex中
       // this.$store.state.cartList.push()  不能这样直接改变state中的值，要通过mutation进行操作
-
-      this.$store.commit('addCart',product)  //通过commit使用mutation方法，前面是方法名，后面是传的参数
+ 
+      //通过commit使用mutation方法，前面是方法名，后面是传的参数
+      // this.$store.commit('addCart',product)
+      this.$store.dispatch('addCart',product).then(res=>{
+        console.log(res);
+        
+      })
 
     }
   },
@@ -149,9 +155,8 @@ export default {
     })
   },
   mounted(){
- 
-      
   },
+
 }
 
 </script>
