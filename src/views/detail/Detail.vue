@@ -14,6 +14,7 @@
     </Scroll>
     <BackTop @click.native="backClick" v-show="isShowBack"></BackTop>
     <DetailBottomBar @addToCart="addToCart"></DetailBottomBar>
+    <Toast></Toast>
   </div>
 </template>
 
@@ -30,6 +31,7 @@ import DetailBottomBar from "./childcomponent/detailbottombar"
 
 import Scroll from "components/common/scroll/Scroll"
 import {BackTopMixin} from "common/mixin"
+import Toast from "components/common/toast/Toast"
 
 import {getDetail,Goods,getRecommend} from "network/detail"
 
@@ -47,6 +49,7 @@ export default {
     DetailRecommend,
     DetailBottomBar,
     Scroll,
+    Toast
   },
   props:{},
   data(){
@@ -124,10 +127,8 @@ export default {
       //通过commit使用mutation方法，前面是方法名，后面是传的参数
       // this.$store.commit('addCart',product)
       this.$store.dispatch('addCart',product).then(res=>{
-        console.log(res);
-        
+        this.$toast.show(res,1500)  //调用toast插件，传入参数
       })
-
     }
   },
   created(){

@@ -1,6 +1,6 @@
 <template>
   <div class="goods-item" @click="itemclick">
-    <img :src="showImg" alt="" @load="imageload">
+    <img v-lazy="showImg" alt="" @load="imageload">
   <div class="goods-info">
     <p>{{ goodsitem.title }}</p>
     <span class="price">{{ goodsitem.price }}</span>
@@ -13,7 +13,7 @@
 export default {
   components:{},
   props:{
-    goodsitem:{
+    goodsitem:{ 
       type:Object,
       default(){
         return {}
